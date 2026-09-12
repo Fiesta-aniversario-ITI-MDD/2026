@@ -113,16 +113,35 @@
 <!-- ===================== BIENVENIDA ===================== -->
 <section class="section section--welcome">
   <div class="container container--narrow">
-    <p class="section__eyebrow" data-aos="fade-up">Un mensaje para toda la ITI</p>
-    <h2 class="section__title" data-aos="fade-up">Un año más juntos, un compromiso que se renueva</h2>
+    <p class=section__eyebrow data-aos="fade-up">Un mensaje para toda la ITI</p>
+        <style>
+.section__eyebrow{
+text-align: justify;
+text-justify: inter-word;
+line-height: 1.8;
+max-width: 800px;
+margin: 0 auto;
+}
+</style>
+    <h2 class=section__title data-aos="fade-up">Un año más juntos, un compromiso que se renueva</h2>
+        <style>
+.section__title{
+text-align: justify;
+text-justify: inter-word;
+line-height: 1.8;
+max-width: 800px;
+margin: 0 auto;
+}
+</style>
     <p class= welcome__text    data-aos="fade-up" data-aos-delay="100">
       Cada aniversario es una oportunidad para mirar atrás con gratitud y hacia adelante con
-      entusiasmo. Detrás de cada acto de fiscalización, cada atención al contribuyente y cada
-      expediente resuelto, hay personas: colegas que se apoyan, equipos que se superan y una
-      institución que se construye día a día con integridad. Este 19 de septiembre queremos
-      celebrar eso — el trabajo bien hecho, el compañerismo que sostiene los días difíciles y
-      la alegría de compartir con nuestras familias. Ven, trae a los tuyos, y sé parte de una
-      noche pensada para reconocer lo que somos cuando trabajamos en equipo.
+      entusiasmo. Detrás de cada acto de fiscalización, cada atención al contribuyente, cada 
+      acción de cobranza y cada requerimiento atendido, hay personas que se apoyan, 
+      equipos que se superan y una institución que se construye día a día con integridad. 
+      Este 19 de septiembre queremos celebrar el trabajo bien hecho, el compañerismo 
+      que sostiene los días difíciles y la alegría de compartir con nuestras familias. 
+      Ven, trae a los tuyos, y sé parte de una noche pensada para reconocer lo que somos 
+      cuando trabajamos en equipo.
     </p>
     <style>
 .welcome__text{
@@ -310,6 +329,11 @@ margin: 0 auto;
           <input type="text" id="nombres" name="nombres" required>
         </div>
         <div class="field">
+          <label for="numeroRegistro">N° de Registro *</label>
+          <input type="text" id="numeroRegistro" name="numeroRegistro" maxlength="4" minlength="4" placeholder="Ej: A1B2" autocomplete="off" required>
+          <p class="field__hint" id="numeroRegistroHint">Código alfanumérico de 4 caracteres.</p>
+        </div>
+        <div class="field">
           <label for="area">Área *</label>
           <select id="area" name="area" required>
             <option value="">Selecciona tu área</option>
@@ -428,22 +452,6 @@ margin: 0 auto;
         <canvas id="chartMenu"></canvas>
       </div>
     </div>
-
-    <div class="ranking-table-wrap" data-aos="fade-up">
-      <h3>Tablero de participación por área</h3>
-      <table class="ranking-table">
-        <thead>
-          <tr><th>Área</th><th>Titulares</th><th>Acompañantes</th><th>Total</th></tr>
-        </thead>
-        <tbody id="rankingBody">
-          <tr><td colspan="4">Cargando…</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p class="stats__note">
-      Panel público resumido. El dashboard ejecutivo completo (recaudación y montos) está disponible
-      para el equipo organizador en <code>admin.html</code>.
     </p>
   </div>
 </section>
