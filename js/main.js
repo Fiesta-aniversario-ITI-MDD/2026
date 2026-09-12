@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSwiperVenue();
   initLightbox();
   initPaymentCalculator();
+  initNumeroRegistro();
   initFormSubmit();
   initQrCode();
   initPdfDownload();
@@ -240,6 +241,39 @@ function initPaymentCalculator() {
 }
 
 /* -------------------------------------------------------------------- */
+/* N° DE REGISTRO — formato en vivo + verificación de duplicado */
+/* -------------------------------------------------------------------- */
+const REGISTRO_REGEX = /^[A-Z0-9]{4}$/;
+
+function initNumeroRegistro() {
+  const input = document.getElementById('numeroRegistro');
+  const hint = document.getElementById('numeroRegistroHint');
+  if (!input) return;
+  const hintDefault = hint.textContent;
+
+  input.addEventListener('input', () => {
+    input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+    hint.textContent = hintDefault;
+    hint.style.color = '';
+  });
+
+  input.addEventListener('blur', async () => {
+    const valor = input.value.trim();
+    if (!REGISTRO_REGEX.test(valor)) return;
+    try {
+      const res = await fetch(API_URL + '?action=checkRegistro&numero=' + encodeURIComponent(valor));
+      const data = await res.json();
+      if (data.exists) {
+        hint.textContent = 'Este número de registro ya fue utilizado.';
+        hint.style.color = '#C8102E';
+      }
+    } catch (err) {
+      // Sin conexión al backend todavía: la validación definitiva se hace igual al enviar.
+    }
+  });
+}
+
+/* -------------------------------------------------------------------- */
 /* ENVÍO DE FORMULARIO */
 /* -------------------------------------------------------------------- */
 function initFormSubmit() {
@@ -250,6 +284,7 @@ function initFormSubmit() {
     e.preventDefault();
 
     const nombres = form.nombres.value.trim();
+    const numeroRegistro = form.numeroRegistro.value.trim().toUpperCase();
     const area = form.area.value;
     const telefono = form.telefono.value.trim();
     const asistira = form.asistira.value;
@@ -257,8 +292,12 @@ function initFormSubmit() {
     const climaEl = form.querySelector('input[name="climaLaboral"]:checked');
     const menuEl = form.querySelector('input[name="menu"]:checked');
 
-    if (!nombres || !area || !telefono || !asistira || !climaEl || !menuEl) {
+    if (!nombres || !numeroRegistro || !area || !telefono || !asistira || !climaEl || !menuEl) {
       Swal.fire({ icon: 'warning', title: 'Faltan datos', text: 'Por favor completa todos los campos obligatorios.', confirmButtonColor: '#C9A227' });
+      return;
+    }
+    if (!REGISTRO_REGEX.test(numeroRegistro)) {
+      Swal.fire({ icon: 'warning', title: 'N° de Registro inválido', text: 'Debe tener exactamente 4 caracteres alfanuméricos.', confirmButtonColor: '#C9A227' });
       return;
     }
     if (!/^[0-9+\s-]{6,15}$/.test(telefono)) {
@@ -271,7 +310,7 @@ function initFormSubmit() {
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando…';
 
     const payload = {
-      nombres, area, telefono, asistira,
+      nombres, numeroRegistro, area, telefono, asistira,
       numAcompanantes, climaLaboral: climaEl.value, menu: menuEl.value
     };
 
