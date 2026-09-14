@@ -4,7 +4,7 @@
 
 // ⚠️ Reemplaza esta URL por la de tu implementación de Google Apps Script
 // (Implementar > Nueva implementación > Aplicación web). Debe terminar en /exec
-const API_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbwv6xs6CCcdM2FfPsVsUDQFlmmLhhFfJBbkITDA9V9n3pCofKUDyRSczCQsvgMTCK2_/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwv6xs6CCcdM2FfPsVsUDQFlmmLhhFfJBbkITDA9V9n3pCofKUDyRSczCQsvgMTCK2_/exec';
 
 const PRECIO_PERSONA = 70;
 const FECHA_EVENTO = new Date('2026-09-19T18:00:00-05:00');
