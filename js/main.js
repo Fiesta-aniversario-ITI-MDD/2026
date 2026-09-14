@@ -4,9 +4,14 @@
 
 // ⚠️ Reemplaza esta URL por la de tu implementación de Google Apps Script
 // (Implementar > Nueva implementación > Aplicación web). Debe terminar en /exec
-const API_URL = 'https://script.google.com/macros/s/AKfycbwv6xs6CCcdM2FfPsVsUDQFlmmLhhFfJBbkITDA9V9n3pCofKUDyRSczCQsvgMTCK2_/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzvN7I54v5lw5SOYQ9wb280dMujOGbDcKXUk2ukKTznGKO_ossvS5UnguqjYBs5OZhY/exec';
 
 const PRECIO_PERSONA = 70;
+const MAX_ACOMPANANTES = 10;
+const MENU_OPCIONES = [
+  { value: 'Opción 1 - Pollo Canga', label: '🍗 Opción 1 · Pollo Canga' },
+  { value: 'Opción 2 - Chicharrón de Chancho', label: '🐷 Opción 2 · Chicharrón de Chancho' }
+];
 const FECHA_EVENTO = new Date('2026-09-19T18:00:00-05:00');
 const AREAS_LISTA = [
   'Intendencia', 'Auditoría', 'Control de la Deuda y Cobranza',
@@ -218,7 +223,7 @@ function initPaymentCalculator() {
   const climaInputs = form.querySelectorAll('input[name="climaLaboral"]');
 
   function recalcular() {
-    const acomp = parseInt(numAcompEl.value, 10) || 0;
+    const acomp = Math.max(0, Math.min(MAX_ACOMPANANTES, parseInt(numAcompEl.value, 10) || 0));
     const climaSeleccionado = form.querySelector('input[name="climaLaboral"]:checked');
     const alDia = climaSeleccionado ? climaSeleccionado.value === 'Sí' : null;
 
@@ -235,9 +240,67 @@ function initPaymentCalculator() {
     setText('pTotal', 'S/ ' + total.toFixed(2));
   }
 
-  numAcompEl.addEventListener('change', recalcular);
+  numAcompEl.addEventListener('change', () => { renderAcompanantesMenu(); recalcular(); });
   climaInputs.forEach(i => i.addEventListener('change', recalcular));
+  renderAcompanantesMenu();
   recalcular();
+}
+
+/* -------------------------------------------------------------------- */
+/* MENÚ POR ACOMPAÑANTE — un plato distinto al del titular para cada uno */
+/* -------------------------------------------------------------------- */
+function renderAcompanantesMenu() {
+  const numAcompEl = document.getElementById('numAcompanantes');
+  const wrap = document.getElementById('acompanantesMenuWrap');
+  const container = document.getElementById('acompanantesMenuContainer');
+  if (!numAcompEl || !wrap || !container) return;
+
+  const acomp = Math.max(0, Math.min(MAX_ACOMPANANTES, parseInt(numAcompEl.value, 10) || 0));
+
+  // Conserva las selecciones previas si el usuario reduce y vuelve a subir el número
+  const valoresPrevios = Array.from(container.querySelectorAll('select')).map(s => s.value);
+
+  wrap.hidden = acomp === 0;
+  container.innerHTML = '';
+
+  for (let i = 1; i <= acomp; i++) {
+    const field = document.createElement('div');
+    field.className = 'field';
+
+    const label = document.createElement('label');
+    label.setAttribute('for', 'menuAcomp' + i);
+    label.textContent = 'Menú acompañante ' + i;
+
+    const select = document.createElement('select');
+    select.id = 'menuAcomp' + i;
+    select.name = 'menuAcompanante' + i;
+    select.className = 'menu-acomp-select';
+    select.required = true;
+
+    const optVacia = document.createElement('option');
+    optVacia.value = '';
+    optVacia.textContent = 'Selecciona…';
+    select.appendChild(optVacia);
+
+    MENU_OPCIONES.forEach(op => {
+      const opt = document.createElement('option');
+      opt.value = op.value;
+      opt.textContent = op.label;
+      select.appendChild(opt);
+    });
+
+    if (valoresPrevios[i - 1]) select.value = valoresPrevios[i - 1];
+
+    field.appendChild(label);
+    field.appendChild(select);
+    container.appendChild(field);
+  }
+}
+
+function obtenerMenuAcompanantes() {
+  const container = document.getElementById('acompanantesMenuContainer');
+  if (!container) return [];
+  return Array.from(container.querySelectorAll('select')).map(s => s.value);
 }
 
 /* -------------------------------------------------------------------- */
@@ -288,12 +351,17 @@ function initFormSubmit() {
     const area = form.area.value;
     const telefono = form.telefono.value.trim();
     const asistira = form.asistira.value;
-    const numAcompanantes = form.numAcompanantes.value;
+    const numAcompanantes = Math.max(0, Math.min(MAX_ACOMPANANTES, parseInt(form.numAcompanantes.value, 10) || 0));
     const climaEl = form.querySelector('input[name="climaLaboral"]:checked');
     const menuEl = form.querySelector('input[name="menu"]:checked');
+    const menuAcompanantes = obtenerMenuAcompanantes();
 
     if (!nombres || !numeroRegistro || !area || !telefono || !asistira || !climaEl || !menuEl) {
       Swal.fire({ icon: 'warning', title: 'Faltan datos', text: 'Por favor completa todos los campos obligatorios.', confirmButtonColor: '#C9A227' });
+      return;
+    }
+    if (menuAcompanantes.length !== numAcompanantes || menuAcompanantes.some(m => !m)) {
+      Swal.fire({ icon: 'warning', title: 'Falta el menú de un acompañante', text: 'Selecciona el plato de cada acompañante registrado.', confirmButtonColor: '#C9A227' });
       return;
     }
     if (!REGISTRO_REGEX.test(numeroRegistro)) {
@@ -311,7 +379,8 @@ function initFormSubmit() {
 
     const payload = {
       nombres, numeroRegistro, area, telefono, asistira,
-      numAcompanantes, climaLaboral: climaEl.value, menu: menuEl.value
+      numAcompanantes, climaLaboral: climaEl.value, menu: menuEl.value,
+      menuAcompanantes
     };
 
     try {
@@ -331,6 +400,7 @@ function initFormSubmit() {
           confirmButtonColor: '#C9A227'
         });
         form.reset();
+        renderAcompanantesMenu();
         window.__lastRegistro = data.idRegistro;
         loadStats();
       } else {
