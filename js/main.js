@@ -4,7 +4,7 @@
 
 // ⚠️ Reemplaza esta URL por la de tu implementación de Google Apps Script
 // (Implementar > Nueva implementación > Aplicación web). Debe terminar en /exec
-const API_URL = 'https://script.google.com/macros/s/AKfycbzvN7I54v5lw5SOYQ9wb280dMujOGbDcKXUk2ukKTznGKO_ossvS5UnguqjYBs5OZhY/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyvihqRyGdHva4lU4Jl5Ue-E04EKfCflpXBTT-QS045aLxlguZRGiuZLuCQRCaciXkI/exec';
 
 const PRECIO_PERSONA = 70;
 const MAX_ACOMPANANTES = 10;
@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNumeroRegistro();
   initFormSubmit();
   initQrCode();
+  initQrDownload();
   initPdfDownload();
   loadStats();
   setInterval(loadStats, 30000); // refresco cada 30s
@@ -393,15 +394,23 @@ function initFormSubmit() {
 
       if (data.ok) {
         launchConfetti();
+        window.__lastRegistro = data.idRegistro;
+        window.__lastNumeroRegistro = data.numeroRegistro || numeroRegistro;
+
+        if (data.qrData) generarQrPersonal(data.qrData);
+
         Swal.fire({
           icon: 'success',
           title: '¡Asistencia confirmada!',
-          html: `Tu código de registro es <strong>${data.idRegistro}</strong><br>Total a pagar: <strong>S/ ${data.pago.total.toFixed(2)}</strong>`,
+          html: `Tu código de registro es <strong>${data.idRegistro}</strong><br>Total a pagar: <strong>S/ ${data.pago.total.toFixed(2)}</strong><br><br>Ya puedes descargar tu código QR más abajo, en "Lleva tu invitación contigo".`,
           confirmButtonColor: '#C9A227'
+        }).then(() => {
+          const qrSection = document.getElementById('miQr');
+          if (qrSection) qrSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
+
         form.reset();
         renderAcompanantesMenu();
-        window.__lastRegistro = data.idRegistro;
         loadStats();
       } else {
         Swal.fire({ icon: 'error', title: 'No se pudo registrar', text: data.error || 'Intenta nuevamente en unos minutos.', confirmButtonColor: '#C9A227' });
@@ -507,13 +516,54 @@ function renderRanking(porArea) {
 }
 
 /* -------------------------------------------------------------------- */
-/* QR DE LA INVITACIÓN */
+/* QR PERSONAL DEL REGISTRO (con menú del titular y acompañantes) */
 /* -------------------------------------------------------------------- */
+// window.__lastQrDataUrl guarda el PNG del QR ya generado para poder
+// descargarlo y también insertarlo en el PDF de la invitación.
+window.__lastQrDataUrl = null;
+
 function initQrCode() {
+  // No dibuja nada al cargar la página: el QR se genera recién cuando el
+  // backend confirma el registro (ver generarQrPersonal más abajo), porque
+  // solo entonces existen el N° de registro y los menús elegidos.
+}
+
+function generarQrPersonal(qrData) {
   const container = document.getElementById('qrCode');
+  const btn = document.getElementById('downloadQrBtn');
   if (!container || !window.QRCode) return;
-  QRCode.toCanvas(document.createElement('canvas'), window.location.href, { width: 160, margin: 1 }, (err, canvas) => {
-    if (!err) container.appendChild(canvas);
+
+  const canvas = document.createElement('canvas');
+  QRCode.toCanvas(canvas, qrData, { width: 200, margin: 1 }, (err) => {
+    if (err) return;
+    container.innerHTML = '';
+    container.appendChild(canvas);
+    window.__lastQrDataUrl = canvas.toDataURL('image/png');
+    if (btn) btn.disabled = false;
+  });
+}
+
+function initQrDownload() {
+  const btn = document.getElementById('downloadQrBtn');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    if (!window.__lastQrDataUrl) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Aún no tienes un QR',
+        text: 'Completa primero el formulario de registro para generar tu código QR.',
+        confirmButtonColor: '#C9A227'
+      });
+      return;
+    }
+    const nombreArchivo = 'QR-SUNAT2026-' + (window.__lastNumeroRegistro || window.__lastRegistro || 'invitacion') + '.png';
+    const link = document.createElement('a');
+    link.href = window.__lastQrDataUrl;
+    link.download = nombreArchivo;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   });
 }
 
@@ -559,9 +609,17 @@ function initPdfDownload() {
       doc.text('Código de registro: ' + window.__lastRegistro, 74, 145, { align: 'center' });
     }
 
+    if (window.__lastQrDataUrl) {
+      const qrSize = 32;
+      doc.addImage(window.__lastQrDataUrl, 'PNG', 74 - qrSize / 2, 148, qrSize, qrSize);
+      doc.setTextColor(245, 241, 232);
+      doc.setFontSize(8);
+      doc.text('Presenta este QR en el ingreso', 74, 184, { align: 'center' });
+    }
+
     doc.setTextColor(232, 199, 102);
     doc.setFontSize(9);
-    doc.text('ITI Madre de Dios · SUNAT 2026', 74, 195, { align: 'center' });
+    doc.text('ITI Madre de Dios · SUNAT 2026', 74, 198, { align: 'center' });
 
     doc.save('Invitacion-Aniversario-SUNAT-2026.pdf');
   });
