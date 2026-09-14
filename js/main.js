@@ -4,7 +4,7 @@
 
 // ⚠️ Reemplaza esta URL por la de tu implementación de Google Apps Script
 // (Implementar > Nueva implementación > Aplicación web). Debe terminar en /exec
-const API_URL = 'https://script.google.com/macros/s/AKfycbyvihqRyGdHva4lU4Jl5Ue-E04EKfCflpXBTT-QS045aLxlguZRGiuZLuCQRCaciXkI/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzvN7I54v5lw5SOYQ9wb280dMujOGbDcKXUk2ukKTznGKO_ossvS5UnguqjYBs5OZhY/exec';
 
 const PRECIO_PERSONA = 70;
 const MAX_ACOMPANANTES = 10;
