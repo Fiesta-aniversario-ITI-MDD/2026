@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aniversario SUNAT 2026 · ITI Madre de Dios</title>
+<meta name="description" content="Invitación digital al Aniversario SUNAT 2026, organizado por la Intendencia Territorial de Madre de Dios. Confirma tu asistencia y la de tus acompañantes.">
+<meta property="og:title" content="Aniversario SUNAT 2026">
+<meta property="og:description" content="Una noche especial de celebración, integración, reconocimiento y confraternidad para toda la familia SUNAT.">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/icons/favicon.png">
+
+<!-- Fuentes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Librerías -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== LOADER ===================== -->
+<div id="loader" class="loader">
+  <div class="loader-emblem">
+    <span class="loader-ring"></span>
+    <i class="fa-solid fa-shield-halved"></i>
+  </div>
+  <p>Preparando tu invitación…</p>
+</div>
+
+<!-- ===================== BOTONES FLOTANTES ===================== -->
+<button id="darkModeToggle" class="floating-btn floating-btn--top" aria-label="Cambiar modo oscuro">
+  <i class="fa-solid fa-moon"></i>
+</button>
+<button id="musicToggle" class="floating-btn floating-btn--music" aria-label="Activar música">
+  <i class="fa-solid fa-music"></i>
+</button>
+<a id="whatsappBtn" class="floating-btn floating-btn--whatsapp" href="https://wa.me/51997077837?text=Hola%2C%20tengo%20una%20consulta%20sobre%20el%20Aniversario%20SUNAT%202026" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+<button id="backToTop" class="floating-btn floating-btn--top-arrow" aria-label="Volver arriba">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+<audio id="bgMusic" loop preload="none">
+  <source src="assets/musica-ambiente.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <div class="nav__brand">
+      <img src="assets/icons/logo-sunat.png" alt="Logo SUNAT" class="nav__logo">
+      <span>Aniversario SUNAT 2026</span>
+    </div>
+    <nav class="nav__links">
+      <a href="#programa">Programa</a>
+      <a href="#costo">Costo</a>
+      <a href="#confirmar" class="nav__cta">Confirmar asistencia</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="hero__particles" id="particles"></div>
+  <div class="hero__content">
+    <img src="assets/icons/logo-sunat.png" alt="Logo SUNAT" class="hero__logo" data-aos="fade-down">
+    <p class="hero__eyebrow" data-aos="fade-up" data-aos-delay="100">ITI Madre de Dios presenta</p>
+    <h1 class="hero__title" data-aos="fade-up" data-aos-delay="200">Aniversario<br>SUNAT 2026</h1>
+    <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="300">
+      "Celebrando juntos un año más de compromiso, integridad y servicio al país"
+    </p>
+
+    <div class="hero__meta" data-aos="fade-up" data-aos-delay="400">
+      <div class="hero__meta-item">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>19 de septiembre de 2026</span>
+      </div>
+      <div class="hero__meta-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>La Finca de la Joya — Salón de Eventos</span>
+      </div>
+    </div>
+
+    <div class="hero__countdown" id="heroCountdown" data-aos="fade-up" data-aos-delay="500">
+      <div class="countdown-chip"><span id="cdDias">00</span><small>días</small></div>
+      <div class="countdown-chip"><span id="cdHoras">00</span><small>horas</small></div>
+      <div class="countdown-chip"><span id="cdMinutos">00</span><small>min</small></div>
+      <div class="countdown-chip"><span id="cdSegundos">00</span><small>seg</small></div>
+    </div>
+
+    <div class="hero__actions" data-aos="fade-up" data-aos-delay="600">
+      <a href="#confirmar" class="btn btn--gold">Confirmar Asistencia</a>
+      <a href="#actividades" class="btn btn--ghost">Ver Actividades</a>
+      <a href="#ubicacion" class="btn btn--ghost">Cómo Llegar</a>
+    </div>
+  </div>
+  <div class="hero__scroll-cue"><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<!-- ===================== INDICADOR EN VIVO ===================== -->
+<div class="live-strip">
+  <i class="fa-solid fa-circle live-dot"></i>
+  <span>¡Ya somos <strong id="liveCount">0</strong> personas confirmadas para celebrar el Aniversario SUNAT 2026!</span>
+</div>
+
+<!-- ===================== BIENVENIDA ===================== -->
+<section class="section section--welcome">
+  <div class="container container--narrow">
+    <p class=section__eyebrow data-aos="fade-up">Un mensaje para toda la ITI</p>
+        <style>
+.section__eyebrow{
+text-align: justify;
+text-justify: inter-word;
+line-height: 1.8;
+max-width: 800px;
+margin: 0 auto;
+}
+</style>
+    <h2 class=section__title data-aos="fade-up">Un año más juntos, un compromiso que se renueva</h2>
+        <style>
+.section__title{
+text-align: justify;
+text-justify: inter-word;
+line-height: 1.8;
+max-width: 800px;
+margin: 0 auto;
+}
+</style>
+    <p class= welcome__text    data-aos="fade-up" data-aos-delay="100">
+      Cada aniversario es una oportunidad para mirar atrás con gratitud y hacia adelante con
+      entusiasmo. Detrás de cada acto de fiscalización, cada atención al contribuyente, cada 
+      acción de cobranza y cada requerimiento atendido, hay personas que se apoyan, 
+      equipos que se superan y una institución que se construye día a día con integridad. 
+      Este 19 de septiembre queremos celebrar el trabajo bien hecho, el compañerismo 
+      que sostiene los días difíciles y la alegría de compartir con nuestras familias. 
+      Ven, trae a los tuyos, y sé parte de una noche pensada para reconocer lo que somos 
+      cuando trabajamos en equipo.
+    </p>
+    <style>
+.welcome__text{
+text-align: justify;
+text-justify: inter-word;
+line-height: 1.8;
+max-width: 800px;
+margin: 0 auto;
+}
+</style>
+  </div>
+</section>
+
+<!-- ===================== ÁREAS PARTICIPANTES ===================== -->
+<section class="section section--areas" id="areas">
+  <div class="container">
+    <p class="section__eyebrow" data-aos="fade-up">Toda la familia SUNAT, unida</p>
+    <h2 class="section__title" data-aos="fade-up">Áreas Participantes</h2>
+
+    <div class="areas-grid">
+      <article class="area-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="area-card__photo" style="background-image:url('assets/fotos/intendencia/foto1.jpg')"></div>
+        <div class="area-card__body">
+          <h3>Intendencia</h3>
+        </div>
+      </article>
+      <article class="area-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="area-card__photo" style="background-image:url('assets/fotos/auditoria/foto1.jpg')"></div>
+        <div class="area-card__body">
+          <h3>Auditoría</h3>
+        </div>
+      </article>
+      <article class="area-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="area-card__photo" style="background-image:url('assets/fotos/cobranza/foto1.jpg')"></div>
+        <div class="area-card__body">
+          <h3>Control de la Deuda y Cobranza</h3>
+        </div>
+      </article>
+      <article class="area-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="area-card__photo" style="background-image:url('assets/fotos/servicios/foto1.jpg')"></div>
+        <div class="area-card__body">
+          <h3>Servicios al Contribuyente</h3>
+        </div>
+      </article>
+      <article class="area-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="area-card__photo" style="background-image:url('assets/fotos/soporte-administrativo/foto1.jpg')"></div>
+        <div class="area-card__body">
+          <h3>Soporte Administrativo</h3>
+        </div>
+      </article>
+    </div>
+
+    <div class="guests" data-aos="fade-up">
+      <p class="guests__label"><i class="fa-solid fa-star"></i> Invitados Especiales</p>
+      <div class="guests-grid">
+        <article class="guest-card">
+          <div class="guest-card__photo" style="background-image:url('assets/fotos/aduanas/foto1.jpg')"></div>
+          <span class="guest-card__badge"><i class="fa-solid fa-star"></i> Invitado especial</span>
+          <h3>Aduanas</h3>
+        </article>
+        <article class="guest-card">
+          <div class="guest-card__photo" style="background-image:url('assets/fotos/insumos/foto1.jpg')"></div>
+          <span class="guest-card__badge"><i class="fa-solid fa-star"></i> Invitado especial</span>
+          <h3>Insumos Químicos</h3>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALERÍA DEL LOCAL ===================== -->
+<section class="section section--venue">
+  <div class="container">
+    <p class="section__eyebrow" data-aos="fade-up">El escenario de la noche</p>
+    <h2 class="section__title" data-aos="fade-up">La Finca de la Joya</h2>
+
+    <div class="swiper venueSwiper" data-aos="fade-up">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <img src="assets/fotos/local/foto1.jpg" alt="Local del evento — vista 1" data-lightbox>
+        </div>
+        <div class="swiper-slide">
+          <img src="assets/fotos/local/foto2.jpg" alt="Local del evento — vista 2" data-lightbox>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ACTIVIDADES ===================== -->
+<section class="section section--activities" id="actividades">
+  <div class="container">
+    <p class="section__eyebrow" data-aos="fade-up">La noche tiene sorpresas</p>
+    <h2 class="section__title" data-aos="fade-up">🎉 Actividades Principales</h2>
+
+    <div class="activities-grid">
+      <article class="activity-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="activity-card__icon"><i class="fa-solid fa-microphone-lines"></i></div>
+        <h3>Show de Talentos SUNAT 2026</h3>
+        <p>Nuestros compañeros demostrarán sus habilidades artísticas en canto, baile, música,
+        actuación, humor y otras expresiones creativas en una noche llena de talento y alegría.</p>
+      </article>
+      <article class="activity-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="activity-card__icon"><i class="fa-solid fa-people-group"></i></div>
+        <h3>Concurso "100 Colaboradores Dicen"</h3>
+        <p>Los equipos participantes representarán a cada área en una divertida competencia
+        inspirada en los concursos de respuestas más populares, poniendo a prueba su creatividad,
+        rapidez mental y trabajo en equipo.</p>
+      </article>
+      <article class="activity-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="activity-card__icon"><i class="fa-solid fa-champagne-glasses"></i></div>
+        <h3>Integración y Confraternidad</h3>
+        <p>Una noche destinada a fortalecer la amistad, compartir experiencias y celebrar juntos
+        los logros institucionales.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROGRAMA ===================== -->
+<section class="section section--program" id="programa">
+  <div class="container container--narrow">
+    <p class="section__eyebrow" data-aos="fade-up">Así viviremos la noche</p>
+    <h2 class="section__title" data-aos="fade-up">Programa del Evento</h2>
+
+    <ol class="timeline">
+      <li class="timeline__item" data-aos="fade-up"><span class="timeline__time">18:00</span><span class="timeline__label">Recepción de invitados</span></li>
+      <li class="timeline__item" data-aos="fade-up"><span class="timeline__time">18:30</span><span class="timeline__label">Palabras de bienvenida</span></li>
+      <li class="timeline__item" data-aos="fade-up"><span class="timeline__time">19:00</span><span class="timeline__label">Cena de confraternidad</span></li>
+      <li class="timeline__item" data-aos="fade-up"><span class="timeline__time">20:00</span><span class="timeline__label">Show de Talentos SUNAT 2026</span></li>
+      <li class="timeline__item" data-aos="fade-up"><span class="timeline__time">21:00</span><span class="timeline__label">Concurso "100 Colaboradores Dicen"</span></li>
+      <li class="timeline__item" data-aos="fade-up"><span class="timeline__time">21:30</span><span class="timeline__label">Celebración e integración</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== COSTO ===================== -->
+<section class="section section--cost" id="costo">
+  <div class="container">
+    <p class="section__eyebrow" data-aos="fade-up">💳 Costo de Participación</p>
+    <h2 class="section__title" data-aos="fade-up">Tu entrada a una noche memorable</h2>
+
+    <div class="cost-grid">
+      <div class="cost-card" data-aos="fade-up">
+        <span class="cost-card__price">S/ 70.00</span>
+        <span class="cost-card__label">por persona</span>
+        <ul>
+          <li><i class="fa-solid fa-check"></i> Aplica para titulares</li>
+          <li><i class="fa-solid fa-check"></i> Aplica para acompañantes</li>
+        </ul>
+      </div>
+
+      <div class="cost-card cost-card--benefit" data-aos="fade-up" data-aos-delay="150">
+        <span class="cost-card__badge">🌟 Beneficio Clima Laboral</span>
+        <p>Como reconocimiento a su compromiso y aporte permanente, los integrantes que se
+        encuentren al día con sus aportaciones de Clima Laboral contarán con una
+        <strong>subvención del 100&nbsp;%</strong> únicamente para su propia participación como
+        titular.</p>
+        <p class="cost-card__note">
+          Los acompañantes no se encuentran cubiertos por este beneficio y deberán abonar su
+          participación de manera regular.
+        </p>
+        <ul>
+          <li><i class="fa-solid fa-check"></i> Subvención al titular</li>
+          <li><i class="fa-solid fa-check"></i> Beneficio exclusivo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FORMULARIO ===================== -->
+<section class="section section--form" id="confirmar">
+  <div class="container container--narrow">
+    <p class="section__eyebrow" data-aos="fade-up">Último paso</p>
+    <h2 class="section__title" data-aos="fade-up">Confirma tu Asistencia</h2>
+
+    <form id="registroForm" class="rsvp-form" data-aos="fade-up" novalidate>
+      <div class="rsvp-form__grid">
+        <div class="field">
+          <label for="nombres">Nombres y Apellidos *</label>
+          <input type="text" id="nombres" name="nombres" required>
+        </div>
+        <div class="field">
+          <label for="numeroRegistro">N° de Registro *</label>
+          <input type="text" id="numeroRegistro" name="numeroRegistro" maxlength="4" minlength="4" placeholder="Ej: A1B2" autocomplete="off" required>
+          <p class="field__hint" id="numeroRegistroHint">Código alfanumérico de 4 caracteres.</p>
+        </div>
+        <div class="field">
+          <label for="area">Área *</label>
+          <select id="area" name="area" required>
+            <option value="">Selecciona tu área</option>
+            <option>Intendencia</option>
+            <option>Auditoría</option>
+            <option>Control de la Deuda y Cobranza</option>
+            <option>Servicios al Contribuyente</option>
+            <option>Soporte Administrativo</option>
+            <option>Aduanas</option>
+            <option>Insumos Químicos</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="telefono">Teléfono *</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="9XXXXXXXX" required>
+        </div>
+        <div class="field">
+          <label for="asistira">¿Asistirá? *</label>
+          <select id="asistira" name="asistira" required>
+            <option value="">Selecciona una opción</option>
+            <option value="Sí">Sí, ahí estaré</option>
+            <option value="No">No podré asistir</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="numAcompanantes">Número de acompañantes</label>
+          <select id="numAcompanantes" name="numAcompanantes">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <div class="field field--full">
+          <label>¿Se encuentra al día con las aportaciones de Clima Laboral? *</label>
+          <div class="radio-row">
+            <label class="radio-pill"><input type="radio" name="climaLaboral" value="Sí" required> Sí</label>
+            <label class="radio-pill"><input type="radio" name="climaLaboral" value="No"> No</label>
+          </div>
+          <p class="field__hint">El beneficio de Clima Laboral aplica únicamente al titular.</p>
+        </div>
+
+        <div class="field field--full">
+          <label>Elige tu menú *</label>
+          <div class="menu-grid">
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Opción 1 - Pollo Canga" required>
+              <div>
+                <span class="menu-card__title">🍗 Opción 1 · Pollo Canga</span>
+                <span class="menu-card__desc">Toscana, cecina, tacacho, arroz, maduro y ensalada</span>
+              </div>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Opción 2 - Chicharrón de Chancho">
+              <div>
+                <span class="menu-card__title">🐷 Opción 2 · Chicharrón de Chancho</span>
+                <span class="menu-card__desc">Tamal, tacacho, yuca, choclo y ensalada criolla</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="field field--full" id="acompanantesMenuWrap" hidden>
+          <label>Menú de cada acompañante *</label>
+          <p class="field__hint">Cada acompañante puede elegir un plato distinto al del titular.</p>
+          <div id="acompanantesMenuContainer" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;"></div>
+        </div>
+      </div>
+
+      <!-- RESUMEN DE PAGO -->
+      <div class="payment-summary" id="paymentSummary">
+        <h3>Resumen de tu participación</h3>
+        <div class="payment-row"><span><i class="fa-solid fa-user"></i> Costo titular</span><span id="pTitular">S/ 0.00</span></div>
+        <div class="payment-row"><span><i class="fa-solid fa-people-group"></i> N° acompañantes</span><span id="pAcompCount">0</span></div>
+        <div class="payment-row"><span><i class="fa-solid fa-credit-card"></i> Costo acompañantes</span><span id="pAcompanantes">S/ 0.00</span></div>
+        <div class="payment-row"><span><i class="fa-solid fa-gift"></i> Beneficio aplicado</span><span id="pBeneficio">—</span></div>
+        <div class="payment-row payment-row--total"><span><i class="fa-solid fa-circle-check"></i> Total a pagar</span><span id="pTotal">S/ 0.00</span></div>
+      </div>
+
+      <button type="submit" class="btn btn--gold btn--block" id="submitBtn">
+        <i class="fa-solid fa-paper-plane"></i> Confirmar mi asistencia
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== CUENTA REGRESIVA COMPLETA ===================== -->
+<section class="section section--countdown">
+  <div class="container container--narrow">
+    <p class="section__eyebrow" data-aos="fade-up">Faltan…</p>
+    <h2 class="section__title" data-aos="fade-up">La cuenta regresiva ya empezó</h2>
+    <div class="countdown-full" data-aos="zoom-in">
+      <div class="countdown-full__item"><span id="fcDias">00</span><small>Días</small></div>
+      <div class="countdown-full__item"><span id="fcHoras">00</span><small>Horas</small></div>
+      <div class="countdown-full__item"><span id="fcMinutos">00</span><small>Minutos</small></div>
+      <div class="countdown-full__item"><span id="fcSegundos">00</span><small>Segundos</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ESTADÍSTICAS PÚBLICAS ===================== -->
+<section class="section section--stats" id="estadisticas">
+  <div class="container">
+    <p class="section__eyebrow" data-aos="fade-up">En tiempo real</p>
+    <h2 class="section__title" data-aos="fade-up">Así vamos hasta ahora</h2>
+
+    <div class="kpi-grid">
+      <div class="kpi-card" data-aos="fade-up"><span class="kpi-card__value" id="kpiTitulares">0</span><span class="kpi-card__label">Titulares confirmados</span></div>
+      <div class="kpi-card" data-aos="fade-up" data-aos-delay="80"><span class="kpi-card__value" id="kpiAcompanantes">0</span><span class="kpi-card__label">Acompañantes</span></div>
+      <div class="kpi-card" data-aos="fade-up" data-aos-delay="160"><span class="kpi-card__value" id="kpiTotal">0</span><span class="kpi-card__label">Total de asistentes</span></div>
+      <div class="kpi-card" data-aos="fade-up" data-aos-delay="240"><span class="kpi-card__value" id="kpiSubvencionados">0</span><span class="kpi-card__label">Subvencionados</span></div>
+    </div>
+
+    <div class="chart-grid" data-aos="fade-up">
+      <div class="chart-card">
+        <h3>Participación por área</h3>
+        <canvas id="chartAreas"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Elección de menú</h3>
+        <canvas id="chartMenu"></canvas>
+      </div>
+    </div>
+    </p>
+  </div>
+</section>
+
+<!-- ===================== UBICACIÓN ===================== -->
+<section class="section section--location" id="ubicacion">
+  <div class="container">
+    <p class="section__eyebrow" data-aos="fade-up">¿Cómo llegamos?</p>
+    <h2 class="section__title" data-aos="fade-up">La Finca de la Joya — Salón de Eventos</h2>
+    <p class="location__address" data-aos="fade-up">
+      <i class="fa-solid fa-location-dot"></i>
+      Av. Aeropuerto con Calle Los Otorongos, Tambopata — Madre de Dios
+    </p>
+
+    <div class="map-wrap" data-aos="fade-up">
+      <iframe
+        src="https://www.google.com/maps?q=Av.+Aeropuerto+con+Calle+Los+Otorongos,+Tambopata,+Madre+de+Dios,+Peru&output=embed"
+        width="100%" height="420" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade" title="Ubicación de La Finca de la Joya"></iframe>
+    </div>
+
+    <div class="location__actions" data-aos="fade-up">
+      <a class="btn btn--gold" href="https://www.google.com/maps/dir/?api=1&destination=Av.+Aeropuerto+con+Calle+Los+Otorongos,+Tambopata,+Madre+de+Dios" target="_blank" rel="noopener">
+        <i class="fa-solid fa-diamond-turn-right"></i> Cómo llegar
+      </a>
+      <a class="btn btn--ghost" href="https://www.google.com/maps/search/?api=1&query=Av.+Aeropuerto+con+Calle+Los+Otorongos,+Tambopata,+Madre+de+Dios" target="_blank" rel="noopener">
+        <i class="fa-solid fa-map-location-dot"></i> Abrir en Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== QR + DESCARGA INVITACIÓN ===================== -->
+<section class="section section--qr" id="miQr">
+  <div class="container container--narrow qr-block" data-aos="zoom-in">
+    <div id="qrCode">
+      <p class="qr-placeholder" id="qrPlaceholder">
+        <i class="fa-solid fa-qrcode"></i><br>
+        Completa el formulario de registro para generar tu código QR personal.
+      </p>
+    </div>
+    <div>
+      <h3>Lleva tu invitación contigo</h3>
+      <p id="qrDescripcion">Tu código QR incluye tu N° de registro y el plato elegido por ti y tus acompañantes. Preséntalo el día del evento.</p>
+      <div class="qr-actions">
+        <button class="btn btn--gold" id="downloadQrBtn" disabled>
+          <i class="fa-solid fa-qrcode"></i> Descargar mi código QR
+        </button>
+        <button class="btn btn--ghost" id="downloadPdfBtn"><i class="fa-solid fa-file-arrow-down"></i> Descargar invitación PDF</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <img src="assets/icons/logo-sunat.png" alt="Logo SUNAT" class="footer__logo">
+  <p class="footer__title">ITI Madre de Dios · SUNAT 2026</p>
+  <p class="footer__thanks">Gracias por ser parte de esta gran celebración.</p>
+</footer>
+
+<!-- Lightbox simple -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lightboxClose" aria-label="Cerrar">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
